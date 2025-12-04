@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsible AI Use - Digital Library Management System</title>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #3b82f6;
+            --accent: #60a5fa;
+            --light-blue: #7dd3fc;
+            --success: #10b981;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 25%, #f8fafc 50%, #e0e7ff 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+            background-color: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 6rem 0 8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: -2px;
+            text-shadow: 8px 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray-600);
+            font-weight: 400;
+            margin-bottom: 3rem;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .btn-get-started {
+            background: linear-gradient(135deg, var(--light-blue), var(--secondary));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 1rem 3rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-get-started:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+            color: white;
+        }
+
+        .hero-illustration {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 600px;
+        }
+
+        .hero-image {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Articles Section */
+        .stats-section {
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            margin: 4rem 0;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 0;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .article-image {
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .search-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .article-search-text {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            color: #333;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .article-category {
+            color: var(--secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1.5rem 1.5rem 0.5rem;
+        }
+
+        .article-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            padding: 0 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .article-description {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            text-align: center;
+            color: var(--gray-600);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .content-card p {
+            color: var(--gray-600);
+            line-height: 1.7;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-card li {
+            color: var(--gray-600);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .content-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 30px;
+            margin: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .btn-cta {
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 1rem 3rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        /* References Styles */
+        .references-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .reference-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .reference-item:last-child {
+            border-bottom: none;
+        }
+
+        .reference-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .reference-content {
+            flex: 1;
+        }
+
+        .reference-content p {
+            color: var(--gray-800);
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-content em {
+            font-style: italic;
+        }
+
+        .reference-link {
+            color: var(--secondary);
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .reference-link:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .cta-title {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-illustration {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="navbar-content">
+            <a class="navbar-brand" href="#home">📚 MMS 171</a>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#principles">Principles</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            Responsible Use of AI-Generated Content
+                        </h1>
+                        <p class="hero-subtitle">
+                            Discover how AI can benefit the Philippines through ethical, transparent, and accountable practices that respect privacy, prevent bias, and protect intellectual rights.
+                        </p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="hero-illustration">
+                        <img src="image.png" alt="AI Responsible Use Illustration" class="hero-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <a href="https://ardion.io/blog/pii-in-ai/" target="_blank" class="stat-card article-card">
+                    <div class="article-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="search-icon">🔍</div>
+                        <div class="article-search-text">Risks of PII in AI</div>
+                    </div>
+                    <div class="article-category">AI Responsibility & Safety</div>
+                    <h3 class="article-title">The risks of PII in AI</h3>
+                    <p class="article-description">In this article, you will learn about the risks associated with handling personally identifiable</p>
+                </a>
+                
+                <a href="https://ardion.io/blog/pros-cons-ai-workplace/" target="_blank" class="stat-card article-card">
+                    <div class="article-image" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);">
+                        <div class="search-icon">🔍</div>
+                        <div class="article-search-text">AI in the workplace</div>
+                    </div>
+                    <div class="article-category">AI Responsibility & Safety</div>
+                    <h3 class="article-title">Pros and cons of AI in workplace</h3>
+                    <p class="article-description">In this article, you learn about the main advantages and disadvantages of using AI</p>
+                </a>
+                
+                <a href="https://ardion.io/blog/ai-act-generative-ai/" target="_blank" class="stat-card article-card">
+                    <div class="article-image" style="background: linear-gradient(135deg, #a8c66c 0%, #1e7a45 100%);">
+                        <div class="search-icon">🔍</div>
+                        <div class="article-search-text">AI Act generative AI</div>
+                    </div>
+                    <div class="article-category">AI Tools & Frameworks</div>
+                    <h3 class="article-title">Generative AI under the AI Act</h3>
+                    <p class="article-description">In this article, you will learn how the AI Act defines generative AI and</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Section -->
+    <section class="content-section" id="overview">
+        <div class="container">
+            <h2 class="section-title">What is Responsible AI Use?</h2>
+            <p class="section-subtitle">
+                AI is transforming the Philippines by driving progress in economy, governance, sustainable development, and human well-being. When used responsibly, AI benefits all communities while respecting cultural values and supporting marginalized groups.
+            </p>
+
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>Transparency and Disclosure</h3>
+                    <p>
+                        AI systems must have clear privacy policies that inform users about data collection and consent. Users need to understand how AI works and the potential consequences of its use.
+                    </p>
+                    <ul>
+                        <li>Clear privacy policies for all users</li>
+                        <li>Transparent consent mechanisms</li>
+                        <li>Easy-to-understand documentation</li>
+                        <li>Disclosure of data usage practices</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h3>Accuracy and Accountability</h3>
+                    <p>
+                        All individuals, groups, universities, and institutions must be responsible for AI use and held accountable for its consequences. This ensures ethical deployment across all sectors.
+                    </p>
+                    <ul>
+                        <li>Clear accountability frameworks</li>
+                        <li>Institutional responsibility</li>
+                        <li>Consequence management systems</li>
+                        <li>Regular audits and reviews</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h3>Ethical AI and Bias Mitigation</h3>
+                    <p>
+                        AI systems must be assessed for effectiveness in reducing gender bias and discrimination. Preventive measures should be implemented in data models and algorithms to ensure fairness.
+                    </p>
+                    <ul>
+                        <li>Gender bias assessment</li>
+                        <li>Non-discrimination standards</li>
+                        <li>Fair algorithm design</li>
+                        <li>Continuous bias monitoring</li>
+                    </ul>
+                </div>
+
+                <div class="content-card">
+                    <h3>Legal Compliance and IP Rights</h3>
+                    <p>
+                        AI must align with Philippine laws including the Data Privacy Act and Cybercrime Prevention Act. Human-created work with AI assistance is protected under the Intellectual Property Code.
+                    </p>
+                    <ul>
+                        <li>Data Privacy Act compliance</li>
+                        <li>Cybercrime Prevention Act adherence</li>
+                        <li>IP protection for human-AI creations</li>
+                        <li>National security protection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keywords Section -->
+    <section class="content-section" id="principles">
+        <div class="container">
+            <h2 class="section-title">Key Terms & Concepts</h2>
+            <p class="section-subtitle">
+                Essential terminology for understanding responsible AI implementation in the Philippine context
+            </p>
+
+            <div class="content-grid">
+                <div class="content-card">
+                    <h3>Human Oversight (HIL)</h3>
+                    <p>
+                        The concept of "Human-in-the-Loop" and its mandatory role in high-risk automated decision-making under the Data Privacy Act (DPA).
+                    </p>
+                </div>
+
+                <div class="content-card">
+                    <h3>Data Privacy Act of 2012 (DPA) / RA 10173</h3>
+                    <p>
+                        The primary law governing data privacy in the Philippines.
+                    </p>
+                </div>
+
+                <div class="content-card">
+                    <h3>NPC AI Advisory</h3>
+                    <p>
+                        Guidelines from the National Privacy Commission (NPC) applying DPA principles—Transparency, Accountability, and Fairness—to AI systems.
+                    </p>
+                </div>
+
+                <div class="content-card">
+                    <h3>IPOPHL Disclosure Guidance</h3>
+                    <p>
+                        Requirements from the Intellectual Property Office of the Philippines (IPOPHL) on disclosing the use and extent of AI in content for copyright registration.
+                    </p>
+                </div>
+
+                <div class="content-card">
+                    <h3>Plagiarism vs. Copyright Infringement</h3>
+                    <p>
+                        Clarifies the difference between improperly citing sources (plagiarism, an ethical/academic issue) and reproducing protected expression (copyright infringement, a legal issue under the IP Code).
+                    </p>
+                </div>
+
+                <div class="content-card">
+                    <h3>AI Bias Types</h3>
+                    <p>
+                        Basic explanations of representational, allocative, and quality-of-service biases in content generation, aligned with NPC's bias monitoring mandate.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- References Section -->
+    <section class="content-section" id="references" style="padding-top: 2rem;">
+        <div class="container">
+            <h2 class="section-title">References</h2>
+            <p class="section-subtitle">
+                Source materials and official guidelines for responsible AI use
+            </p>
+
+            <div class="references-container">
+                <div class="reference-item">
+                    <div class="reference-number">1</div>
+                    <div class="reference-content">
+                        <p>Ardion. (n.d.). <em>How many AI platforms?</em></p>
+                        <a href="https://ardion.io/blog/how-many-ai-platforms/" target="_blank" class="reference-link">https://ardion.io/blog/how-many-ai-platforms/</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-number">2</div>
+                    <div class="reference-content">
+                        <p>University of the Philippines. (2023, November 10). <em>Principles for responsible and trustworthy artificial intelligence.</em></p>
+                        <a href="https://up.edu.ph/up-principles-for-responsible-artificial-intelligence/" target="_blank" class="reference-link">https://up.edu.ph/up-principles-for-responsible-artificial-intelligence/</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-number">3</div>
+                    <div class="reference-content">
+                        <p>Sigue, J. B. (2025, March 12). <em>Advancing AI governance in the Philippines: The road to ethical and responsible AI design, development and deployment.</em></p>
+                        <a href="https://jocellebatapasigue.com/2025/03/12/advancing-ai-governance-in-the-philippines-the-road-to-ethical-and-responsible-ai-design-development-and-deployment/" target="_blank" class="reference-link">https://jocellebatapasigue.com/2025/03/12/advancing-ai-governance-in-the-philippines-the-road-to-ethical-and-responsible-ai-design-development-and-deployment/</a>
+                    </div>
+                </div>
+
+                <div class="reference-item">
+                    <div class="reference-number">4</div>
+                    <div class="reference-content">
+                        <p>Zerrudo, G. R. (n.d.). <em>Deploying AI in the Philippines?</em> Quisumbing Torres.</p>
+                        <a href="https://www.quisumbingtorres.com/en/newsroom/2025/deploying-ai-in-the-philippines" target="_blank" class="reference-link">https://www.quisumbingtorres.com/en/newsroom/2025/deploying-ai-in-the-philippines</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to Learn More?</h2>
+                <p class="cta-subtitle">Join our community of learners committed to responsible AI use and ethical technology practices.</p>
+                <a href="#overview" class="btn-cta">START EXPLORING NOW</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
